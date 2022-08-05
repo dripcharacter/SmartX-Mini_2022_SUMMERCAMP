@@ -122,6 +122,91 @@ ssh <nuc2 username>@nuc02
 ssh <nuc3 username>@nuc03
 ```
 
+#### 2-1-4. Install docker
+
+Docker is a set of platform as a service (PaaS) products that use OS-level virtualization to deliver software in packages called containers. The service has both free and premium tiers. The software that hosts the containers is called Docker Engine. It was first started in 2013 and is developed by Docker, Inc.
+
+Set up the repository
+
+Install packages to allow apt to use a repository over HTTPS
+
+```bash
+sudo apt-get update
+sudo apt-get install -y ca-certificates curl gnupg lsb-release
+```
+
+Add Docker's official GPG key
+
+```bash
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+```
+
+Add the Docker apt repository
+
+```bash
+# For All NUCs
+ echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
+  $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+```
+
+Update APT repos.
+
+```bash
+# For All NUCs
+sudo apt-get update
+```
+
+Install Docker
+
+```bash
+sudo apt-get install -y --allow-downgrades \
+          containerd.io=1.2.13-2 \
+          docker-ce=5:19.03.11~3-0~ubuntu-$(lsb_release -cs) \
+          docker-ce-cli=5:19.03.11~3-0~ubuntu-$(lsb_release -cs)
+```
+
+Create /etc/docker
+
+```bash
+sudo mkdir -p /etc/docker
+```
+
+Set up the Docker daemon
+
+```bash
+cat <<EOF | sudo tee /etc/docker/daemon.json
+{
+  "exec-opts": ["native.cgroupdriver=systemd"],
+  "log-driver": "json-file",
+  "log-opts": {
+    "max-size": "100m"
+  },
+  "storage-driver": "overlay2"
+}
+EOF
+```
+
+Create /etc/systemd/system/docker.service.d
+
+```bash
+sudo mkdir -p /etc/systemd/system/docker.service.d
+sudo systemctl daemon-reload
+sudo systemctl enable docker
+sudo systemctl start docker
+sudo systemctl start docker.socket
+```
+
+#### 2-1-4. Check docker installation
+
+```bash
+sudo docker run hello-world
+```
+
+If it doesn’t work, please try several times. Nevertheless, if you are not successful, try running from the installing `docker-ce`, `docker-ce-cli`, `containerd.io`
+
+![1](../Lab-1. Box/img/1.png)
+
 # 지금부터 NUC1 학생 자리에서 모든 작업을 시작합니다. NUC2, NUC3 학생은  NUC1자리로 가서 작업을 시작합니다.
 
 
