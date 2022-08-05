@@ -205,7 +205,7 @@ sudo docker run hello-world
 
 If it doesn’t work, please try several times. Nevertheless, if you are not successful, try running from the installing `docker-ce`, `docker-ce-cli`, `containerd.io`
 
-![](../Lab-1. Box/img/1.png)
+![](./img/HelloFromDocker.png)
 
 # 지금부터 NUC1 학생 자리에서 모든 작업을 시작합니다. NUC2, NUC3 학생은  NUC1자리로 가서 작업을 시작합니다.
 
